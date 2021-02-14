@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+BIN_DIR=$(cd $(dirname $0); pwd)
+ROOT_DIR=$(dirname $BIN_DIR)
+BUILD_DIR=$1
+CACHE_DIR=$2
+DEPS_DIR=$3
+INDEX_DIR=$4
+
+cp $ROOT_DIR/lib/datadog.py $DEPS_DIR/$INDEX_DIR
+
+# startup script goes into <deps>/<index>/profile.d
+# final build pack *should* copy it into $HOME/profile.d for
+# execution upon container startup
+
+mkdir -p $DEPS_DIR/$INDEX_DIR/profile.d
+cp $ROOT_DIR/lib/datadog.sh $DEPS_DIR/$INDEX_DIR/profile.d
+sed "s/__BUILDPACK_INDEX__/$INDEX_DIR/g" $DEPS_DIR/$INDEX_DIR/profile.d/datadog.sh -i
+chmod +x $DEPS_DIR/$INDEX_DIR/profile.d/datadog.sh

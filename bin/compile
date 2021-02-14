@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+echo "datadog is an intermediate buildpack."
+echo "Please specify a suitable final buildpack."
+exit 1
