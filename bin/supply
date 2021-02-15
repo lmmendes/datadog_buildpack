@@ -28,7 +28,7 @@ cp $ROOT_DIR/lib/datadog.py $DEPS_DIR/$INDEX_DIR
 #sed "s/__BUILDPACK_INDEX__/$INDEX_DIR/g" $DEPS_DIR/$INDEX_DIR/profile.d/datadog.sh -i
 #chmod +x $DEPS_DIR/$INDEX_DIR/profile.d/datadog.sh
 
-mkdir -p $DEPS_DIR/$INDEX_DIR/profile.d
-cp $ROOT_DIR/lib/datadog.sh $BUILD_DIR/profile.d/00-dh-io-datadog.sh
-sed "s/__BUILDPACK_INDEX__/$INDEX_DIR/g" $BUILD_DIR/profile.d/00-dh-io-datadog.sh -i
-chmod +x $BUILD_DIR/profile.d/00-dh-io-datadog.sh
+#mkdir -p $DEPS_DIR/$INDEX_DIR/profile.d
+#cp $ROOT_DIR/lib/datadog.sh $BUILD_DIR/profile.d/00-dh-io-datadog.sh
+#sed "s/__BUILDPACK_INDEX__/$INDEX_DIR/g" $BUILD_DIR/profile.d/00-dh-io-datadog.sh -i
+#chmod +x $BUILD_DIR/profile.d/00-dh-io-datadog.sh
