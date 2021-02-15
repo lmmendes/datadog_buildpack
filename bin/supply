@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
 echo "-----> Datadog Decorator (dh-io-datadog)/supply"
 
@@ -9,20 +10,25 @@ CACHE_DIR=$2
 DEPS_DIR=$3
 INDEX_DIR=$4
 
+echo "-----> Installing Datadog Decorator (dh-io-datadog)"
+echo "       BIN_DIR: $BIN_DIR"
+echo "       BUILD_DIR: $BUILD_DIR"
+echo "       CACHE_DIR: $CACHE_DIR"
+echo "       DEPS_DIR: $DEPS_DIR"
+echo "       BUILDPACK_INDEX: $INDEX_DIR"
+
 SCRIPTS_DIR=$BUILD_DIR/dh-io-datadog
 mkdir -p $SCRIPTS_DIR
 cp $ROOT_DIR/lib/datadog.py $SCRIPTS_DIR/
+
 
 # startup script goes into <deps>/<index>/profile.d
 # final build pack *should* copy it into $HOME/profile.d for
 # execution upon container startup
 
-#mkdir -p $DEPS_DIR/$INDEX_DIR/profile.d
-#cp $ROOT_DIR/lib/datadog.sh $DEPS_DIR/$INDEX_DIR/profile.d
-#chmod +x $DEPS_DIR/$INDEX_DIR/profile.d/datadog.sh
-
-
 # TODO check why deps profile is not being handled. Quick fix for now:
 mkdir -p $BUILD_DIR/.profile.d
 cp $ROOT_DIR/lib/datadog.sh $BUILD_DIR/.profile.d/00-dh-io-datadog.sh
 chmod +x $BUILD_DIR/.profile.d/00-dh-io-datadog.sh
+
+echo "-----> Finished Installing Datadog Decorator (dh-io-datadog)"
