@@ -26,7 +26,7 @@ def get_application_info():
 def find_datadog_service():
     """ Find datadog service """
     vcap_services = json.loads(os.getenv('VCAP_SERVICES', '{}'))
-    tagged_services = [s for s in vcap_services if SERVICE_TAG in s['tags']]
+    tagged_services = [s for _, service_list in vcap_services.items() for s in service_list if SERVICE_TAG in s['tags']]
     if not tagged_services:
         abort("No service bind found with tag {}".format(SERVICE_TAG))
     datadog_service = tagged_services[0]
