@@ -65,7 +65,7 @@ def find_datadog_service():
 
 def make_env(service, appinfo, defaults, default_tags):
     env_vars = service.get('credentials', {})
-    keys = set(env_vars.keys) + set(defaults.keys())
+    keys = set(env_vars.keys()) | set(defaults.keys())
     combined = dict((k, env_vars[k] if k in env_vars else defaults[k]) for k in keys)
 
     # TODO tags
@@ -78,12 +78,17 @@ def change_env_vars(add, remove):
 
     print('removing env variables')
     for key in remove:
-        del os.environ[key]
+        if key in os.environ:
+            print('removing: {}'.format(key))
+            del os.environ[key]
 
     print('injecting env variables')
-    for (key, value) in add:
-        print('injecting: {}={}'.format(key, value))
-        os.environ[key] = value
+    for (key, value) in add.items():
+        if key in os.environ:
+            print('skipping: {}, overriden with value {}'.format(key, value))
+        else:
+            print('injecting: {}={}'.format(key, value))
+            os.environ[key] = str(value)
 
 
 def warn(msg):
