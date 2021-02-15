@@ -20,3 +20,6 @@ mkdir -p $DEPS_DIR/$INDEX_DIR/profile.d
 cp $ROOT_DIR/lib/datadog.sh $DEPS_DIR/$INDEX_DIR/profile.d
 sed "s/__BUILDPACK_INDEX__/$INDEX_DIR/g" $DEPS_DIR/$INDEX_DIR/profile.d/datadog.sh -i
 chmod +x $DEPS_DIR/$INDEX_DIR/profile.d/datadog.sh
+
+# forcing the symbolic link
+ln -n $DEPS_DIR/$INDEX_DIR/profile.d/datadog.sh ~/profile.d/datadog.sh
