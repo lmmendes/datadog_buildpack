@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-
-# As this is a decorator, this should always exit 1
-
-exit 1

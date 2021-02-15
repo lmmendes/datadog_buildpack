@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-
-# Please take a look at the supply script inside meta-buildpack is being deprecated by Pivotal
-
-echo "-----> DatadogBuildpack/decorate"
