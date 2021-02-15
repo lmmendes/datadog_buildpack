@@ -34,3 +34,5 @@ mkdir -p $BUILD_DIR/profile.d
 cp $ROOT_DIR/lib/datadog.sh $BUILD_DIR/profile.d/00-dh-io-datadog.sh
 sed "s/__BUILDPACK_INDEX__/$INDEX_DIR/g" $BUILD_DIR/profile.d/00-dh-io-datadog.sh -i
 chmod +x $BUILD_DIR/profile.d/00-dh-io-datadog.sh
+
+echo "-----> Finished Installing Datadog Decorator (dh-io-datadog)"
