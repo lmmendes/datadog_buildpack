@@ -9,7 +9,35 @@ SERVICE_TAG = 'datadog'
 def main():
     appinfo = get_application_info()
     service = find_datadog_service()
-    inject_datadog(service, appinfo)
+    defaults, default_tags = get_defaults(appinfo, service)
+    env_vars = make_env(service, appinfo, defaults, default_tags)
+    change_env_vars(add=env_vars, remove=['DD_API_KEY'])
+
+
+def get_defaults(appinfo, service):
+    app = appinfo.get('application_name', '')
+    space = appinfo.get('space_name', '')
+    org = appinfo.get('organization_name', '')
+    defaults= {
+            'DD_ENV': space,
+            #'DD_VERSION': TODO,
+            'DD_SERVICE': app,
+            'DD_SITE': 'datadoghq.eu',
+            'RUN_AGENT': 'true',
+            'DD_APM_ENABLED': 'true',
+            'DD_LOGS_ENABLED': 'true',
+            'DD_LOGS_INJECTION': 'true',
+            'DD_TRACE_ANALYTICS_ENABLED': 'true',
+            'DD_ENABLE_CHECKS': 'false',
+            'STD_LOG_COLLECTION_PORT': 10514,
+            'LOGS_CONFIG': json.dumps([{"type": "tcp", "port": "10514", "source": "pcf-mendelui", "service": app}]),
+            }
+    default_tags = {
+            'service': app,
+            'tenant': org,
+            #'version': TODO,
+            }
+    return (defaults, default_tags)
 
 
 def get_application_info():
@@ -35,19 +63,27 @@ def find_datadog_service():
     return datadog_service
 
 
-# TODO:
-# - understand what to do with env variables already set
-# - undertand what to do with non DD_ variables that we will need to set
-def inject_datadog(service, appinfo):
-    """ Injects DO env variables """
-    print('injecting env variables')
+def make_env(service, appinfo, defaults, default_tags):
     env_vars = service.get('credentials', {})
-    for (key, value) in env_vars.items():
+    keys = set(env_vars.keys) + set(defaults.keys())
+    combined = dict((k, env_vars[k] if k in env_vars else defaults[k]) for k in keys)
+
+    # TODO tags
+
+    return combined
+
+
+def change_env_vars(add, remove):
+    """ Sets and unsets env variables """
+
+    print('removing env variables')
+    for key in remove:
+        del os.environ[key]
+
+    print('injecting env variables')
+    for (key, value) in add:
         print('injecting: {}={}'.format(key, value))
         os.environ[key] = value
-    print('============= FILE LIST ========================')
-    file_list = os.listdir('.')
-    print(file_list)
 
 
 def warn(msg):
