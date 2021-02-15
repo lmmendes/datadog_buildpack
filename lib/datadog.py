@@ -27,10 +27,10 @@ def find_datadog_service():
     vcap_services = json.loads(os.getenv('VCAP_SERVICES', '{}'))
     tagged_services = [s for s in vcap_services if SERVICE_TAG in s['tags']]
     if not tagged_services:
-        abort(f"No service bind found with tag {SERVICE_TAG}")
+        abort("No service bind found with tag {}".format(SERVICE_TAG))
     datadog_service = tagged_services[0]
     if len(tagged_services) > 1:
-        warn(f"Multiple tagged services found, using {datadog_service}")
+        warn("Multiple tagged services found, using {}".format(datadog_service))
     return datadog_service
 
 
