@@ -50,7 +50,7 @@ def inject_datadog(service, appinfo):
         print('injecting: {}={}'.format(key, value))
         os.environ[key]=value
     print('============= FILE LIST ========================')
-    file_list = os.listdir()
+    file_list = os.listdir('.')
     print(file_list)
 
 
