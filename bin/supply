@@ -17,12 +17,13 @@ cp $ROOT_DIR/lib/datadog.py $SCRIPTS_DIR/
 # final build pack *should* copy it into $HOME/profile.d for
 # execution upon container startup
 
-mkdir -p $DEPS_DIR/$INDEX_DIR/profile.d
-cp $ROOT_DIR/lib/datadog.sh $DEPS_DIR/$INDEX_DIR/profile.d
-chmod +x $DEPS_DIR/$INDEX_DIR/profile.d/datadog.sh
+#mkdir -p $DEPS_DIR/$INDEX_DIR/profile.d
+#cp $ROOT_DIR/lib/datadog.sh $DEPS_DIR/$INDEX_DIR/profile.d
+#chmod +x $DEPS_DIR/$INDEX_DIR/profile.d/datadog.sh
 
 
 # TODO check why deps profile is not being handled. Quick fix for now:
 mkdir -p $BUILD_DIR/.profile.d
-echo "source $DEPS_DIR/$INDEX_DIR/profile.d/datadog.sh" > $BUILD_DIR/.profile.d/0-dh-io-datadog.sh
+#echo "source $DEPS_DIR/$INDEX_DIR/profile.d/datadog.sh" > $BUILD_DIR/.profile.d/0-dh-io-datadog.sh
+cp $ROOT_DIR/lib/datadog.sh $BUILD_DIR/.profile.d/0-dh-io-datadog.sh
 chmod +x $BUILD_DIR/.profile.d/0-dh-io-datadog.sh
