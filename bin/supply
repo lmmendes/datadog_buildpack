@@ -22,4 +22,4 @@ sed "s/__BUILDPACK_INDEX__/$INDEX_DIR/g" $DEPS_DIR/$INDEX_DIR/profile.d/datadog.
 chmod +x $DEPS_DIR/$INDEX_DIR/profile.d/datadog.sh
 
 # forcing the symbolic link
-ln -n $DEPS_DIR/$INDEX_DIR/profile.d/datadog.sh ~/profile.d/datadog.sh
+ln -n ~/deps/$INDEX_DIR/profile.d/datadog.sh ~/profile.d/datadog.sh
