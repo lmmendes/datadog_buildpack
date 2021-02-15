@@ -49,6 +49,9 @@ def inject_datadog(service, appinfo):
     for (key, value) in env_vars.items():
         print('injecting: {}={}'.format(key, value))
         os.environ[key]=value
+    print('============= FILE LIST ========================')
+    file_list = os.listdir()
+    print(file_list)
 
 
 if __name__ == "__main__":
