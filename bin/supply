@@ -10,6 +10,13 @@ CACHE_DIR=$2
 DEPS_DIR=$3
 INDEX_DIR=$4
 
+echo "-----> Installing config-server v$(cat .version)"
+echo "       BIN_DIR: $BIN_DIR"
+echo "       BUILD_DIR: $BUILD_DIR"
+echo "       CACHE_DIR: $CACHE_DIR"
+echo "       DEPS_DIR: $DEPS_DIR"
+echo "       BUILDPACK_INDEX: $BUILDPACK_INDEX"
+
 cp $ROOT_DIR/lib/datadog.py $DEPS_DIR/$INDEX_DIR
 
 # startup script goes into <deps>/<index>/profile.d
@@ -20,6 +27,3 @@ mkdir -p $DEPS_DIR/$INDEX_DIR/profile.d
 cp $ROOT_DIR/lib/datadog.sh $DEPS_DIR/$INDEX_DIR/profile.d
 sed "s/__BUILDPACK_INDEX__/$INDEX_DIR/g" $DEPS_DIR/$INDEX_DIR/profile.d/datadog.sh -i
 chmod +x $DEPS_DIR/$INDEX_DIR/profile.d/datadog.sh
-
-# forcing the symbolic link
-ln -n ~/deps/$INDEX_DIR/profile.d/datadog.sh ~/profile.d/datadog.sh
