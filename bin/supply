@@ -23,7 +23,12 @@ cp $ROOT_DIR/lib/datadog.py $DEPS_DIR/$INDEX_DIR
 # final build pack *should* copy it into $HOME/profile.d for
 # execution upon container startup
 
+#mkdir -p $DEPS_DIR/$INDEX_DIR/profile.d
+#cp $ROOT_DIR/lib/datadog.sh $DEPS_DIR/$INDEX_DIR/profile.d
+#sed "s/__BUILDPACK_INDEX__/$INDEX_DIR/g" $DEPS_DIR/$INDEX_DIR/profile.d/datadog.sh -i
+#chmod +x $DEPS_DIR/$INDEX_DIR/profile.d/datadog.sh
+
 mkdir -p $DEPS_DIR/$INDEX_DIR/profile.d
-cp $ROOT_DIR/lib/datadog.sh $DEPS_DIR/$INDEX_DIR/profile.d
-sed "s/__BUILDPACK_INDEX__/$INDEX_DIR/g" $DEPS_DIR/$INDEX_DIR/profile.d/datadog.sh -i
-chmod +x $DEPS_DIR/$INDEX_DIR/profile.d/datadog.sh
+cp $ROOT_DIR/lib/datadog.sh $BUILD_DIR/profile.d/00-dh-io-datadog.sh
+sed "s/__BUILDPACK_INDEX__/$INDEX_DIR/g" $BUILD_DIR/profile.d/00-dh-io-datadog.sh -i
+chmod +x $BUILD_DIR/profile.d/00-dh-io-datadog.sh
