@@ -10,12 +10,12 @@ CACHE_DIR=$2
 DEPS_DIR=$3
 INDEX_DIR=$4
 
-echo "-----> Installing config-server v$(cat .version)"
+echo "-----> Installing Datadog Decorator (dh-io-datadog)"
 echo "       BIN_DIR: $BIN_DIR"
 echo "       BUILD_DIR: $BUILD_DIR"
 echo "       CACHE_DIR: $CACHE_DIR"
 echo "       DEPS_DIR: $DEPS_DIR"
-echo "       BUILDPACK_INDEX: $BUILDPACK_INDEX"
+echo "       BUILDPACK_INDEX: $INDEX_DIR"
 
 cp $ROOT_DIR/lib/datadog.py $DEPS_DIR/$INDEX_DIR
 
