@@ -9,7 +9,8 @@ CACHE_DIR=$2
 DEPS_DIR=$3
 INDEX_DIR=$4
 
-cp $ROOT_DIR/lib/datadog.py $DEPS_DIR/$INDEX_DIR
+SCRIPTS_DIR="${DHIO_DATADOG_DIR:-/home/vcap/app/dh-io-datadog}"
+cp $ROOT_DIR/lib/datadog.py $SCRIPTS_DIR/
 
 # startup script goes into <deps>/<index>/profile.d
 # final build pack *should* copy it into $HOME/profile.d for
@@ -17,5 +18,10 @@ cp $ROOT_DIR/lib/datadog.py $DEPS_DIR/$INDEX_DIR
 
 mkdir -p $DEPS_DIR/$INDEX_DIR/profile.d
 cp $ROOT_DIR/lib/datadog.sh $DEPS_DIR/$INDEX_DIR/profile.d
-sed "s/__BUILDPACK_INDEX__/$INDEX_DIR/g" $DEPS_DIR/$INDEX_DIR/profile.d/datadog.sh -i
 chmod +x $DEPS_DIR/$INDEX_DIR/profile.d/datadog.sh
+
+
+# TODO check why deps profile is not being handled. Quick fix for now:
+mkdir -p $BUILD_DIR/.profile.d
+echo "source $DEPS_DIR/$INDEX_DIR/profile.d/datadog.sh" > $BUILD_DIR/profile.d/0-dh-io-datadog.sh
+chmod +x $DEPS_DIR/$INDEX_DIR/profile.d/0-dh-io-datadog.sh
