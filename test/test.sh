@@ -86,7 +86,7 @@ export VCAP_SERVICES='{
     {
       "label": "user-provided",
       "name": "dh-io-datadog",
-      "tags": [],
+      "tags": [ "datadog" ],
       "instance_name": "dh-io-datadog",
       "binding_name": null,
       "credentials": {

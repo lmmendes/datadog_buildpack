@@ -43,16 +43,15 @@ def get_defaults(appinfo, service):
 def get_application_info():
     """ Collect the information about the application """
 
-    appinfo = {}
-    vcap_application = json.loads(os.getenv('VCAP_APPLICATION', '{}'))
-    appinfo['name'] = vcap_application.get('application_name')
-    if not appinfo['name']:
+    appinfo = json.loads(os.getenv('VCAP_APPLICATION', '{}'))
+    if 'name' not in appinfo:
         abort("VCAP_APPLICATION must specify application_name")
     return appinfo
 
 
 def find_datadog_service():
     """ Find datadog service """
+
     vcap_services = json.loads(os.getenv('VCAP_SERVICES', '{}'))
     tagged_services = [s for _, service_list in vcap_services.items() for s in service_list if SERVICE_TAG in s['tags']]
     if not tagged_services:
@@ -85,7 +84,7 @@ def change_env_vars(add, remove):
     print('injecting env variables')
     for (key, value) in add.items():
         if key in os.environ:
-            print('skipping: {}, overriden with value {}'.format(key, value))
+            print('skipping: {}, overriden with value {}'.format(key, os.environ[key]))
         else:
             print('injecting: {}={}'.format(key, value))
             os.environ[key] = str(value)
