@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+echo "-----> Datadog Decorator (dh-io-datadog)/supply"
+
 BIN_DIR=$(cd $(dirname $0); pwd)
 ROOT_DIR=$(dirname $BIN_DIR)
 BUILD_DIR=$1
