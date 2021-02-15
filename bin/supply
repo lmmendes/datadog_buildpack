@@ -10,6 +10,7 @@ DEPS_DIR=$3
 INDEX_DIR=$4
 
 SCRIPTS_DIR="${DHIO_DATADOG_DIR:-/home/vcap/app/dh-io-datadog}"
+mkdir -p $SCRIPTS_DIR
 cp $ROOT_DIR/lib/datadog.py $SCRIPTS_DIR/
 
 # startup script goes into <deps>/<index>/profile.d
