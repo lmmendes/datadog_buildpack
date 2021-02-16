@@ -92,7 +92,7 @@ def change_env_vars(add, remove):
             log('skipping: {}, overriden with value {}'.format(key, os.environ[key]))
         else:
             log('injecting: {}={}'.format(key, value))
-            print('export {}={}'.format(key, str(value)))
+            print("export {}='{}'".format(key, str(value)))
 
 
 def merge_dicts(*dicts):
