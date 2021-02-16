@@ -4,6 +4,7 @@ import sys
 import json
 
 SERVICE_TAG = 'datadog'
+KEY_TAGS = 'DD_TAGS'
 
 
 def main():
@@ -18,9 +19,10 @@ def get_defaults(appinfo, service):
     app = appinfo.get('application_name', '')
     space = appinfo.get('space_name', '')
     org = appinfo.get('organization_name', '')
+    version = os.environ.get('DD_VERSION', 1)
     defaults= {
             'DD_ENV': space,
-            #'DD_VERSION': TODO,
+            'DD_VERSION': version,
             'DD_SERVICE': app,
             'DD_SITE': 'datadoghq.eu',
             'RUN_AGENT': 'true',
@@ -35,7 +37,7 @@ def get_defaults(appinfo, service):
     default_tags = {
             'service': app,
             'tenant': org,
-            #'version': TODO,
+            'version': version,
             }
     return (defaults, default_tags)
 
@@ -63,11 +65,16 @@ def find_datadog_service():
 
 
 def make_env(service, appinfo, defaults, default_tags):
-    env_vars = service.get('credentials', {})
-    keys = set(env_vars.keys()) | set(defaults.keys())
-    combined = dict((k, env_vars[k] if k in env_vars else defaults[k]) for k in keys)
+    service_vars = service.get('credentials', {})
+    combined = merge_dicts(service_vars, defaults)
 
-    # TODO tags
+    if KEY_TAGS in service_vars:
+        service_tags = dict(tuple(kv.strip().split('=')) for kv in service_vars[KEY_TAGS].split(','))
+        tags = merge_dicts(service_tags, default_tags)
+    else:
+        tags = default_tags
+    combined[KEY_TAGS] = ','.join('{}={}'.format(k, v) for k, v in tags.items())
+
 
     return combined
 
@@ -87,6 +94,13 @@ def change_env_vars(add, remove):
             log('injecting: {}={}'.format(key, value))
             print('export {}={}'.format(key, str(value)))
 
+
+def merge_dicts(*dicts):
+    """ merges a set of dicts, highest to lowest prority on conflicts """
+    res = {}
+    for d in dicts[::-1]:
+        res.update(d)
+    return res
 
 def log(msg):
     print('[dh-io-datadog]', msg, file=sys.stderr)

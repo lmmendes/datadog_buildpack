@@ -90,7 +90,8 @@ export VCAP_SERVICES='{
       "instance_name": "dh-io-datadog",
       "binding_name": null,
       "credentials": {
-        "DD_API_KEY": "THIS_IS_API_KEY"
+        "DD_API_KEY": "THIS_IS_API_KEY",
+        "DD_TAGS": "lang=java"
       },
       "syslog_drain_url": "",
       "volume_mounts": []
