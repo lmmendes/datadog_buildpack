@@ -10,7 +10,8 @@ This decorator injects Datadog environment variables inside the droplet.
 
 For more information on the available environment variables: 
 
-https://docs.datadoghq.com/tracing/setup_overview/setup/java/?tab=otherenvironments
+https://docs.datadoghq.com/tracing/setup_overview/setup/java/?tab=otherenvironments#configuration
+
 
 ## Deploying
 
@@ -20,3 +21,58 @@ cf push -f manifest-alpha.yml \
   -b datadog_application_monitoring \
   -b java_buildpack
 ```
+
+# How it works
+
+
+There's three sources for Datadog environment variables:
+
+1. The manifest file
+2. A user provided service tagged with "datadog"
+3. The buildpack's defaults
+
+Except for special cases, they're applied in that order, meaning that the manifest file can override the service values and defaults are only used as last resource.
+
+In general, however, is cleaner to keep all Datadog configurations in the user provided service to avoid cluttering the manifest with too manyy variables and to keep everything related to Datadog in the same place.
+
+
+## Special cases
+
+The `DD_API_KEY` can't be set in the manifest and must be in the service.
+
+`JAVA_OPTS` ... TODO
+
+`DD_TAGS` ... TODO
+
+`DD_VERSION` ... TODO
+
+
+# How to use it
+
+## Create a service
+
+Create a PCF user provided service containing the relevant variables, eg:
+
+```bash
+cf cups appx-datadog -t "datadog" -p '{"DD_API_KEY":"53cr37"}'
+```
+
+## Update the manifest
+
+
+The manifest must include the datadog service and the buildpacks in this order:
+
+```yaml
+applications:
+  - name: appx
+    buildpacks:
+      - dh-io-datadog
+      - datadog_application_monitoring
+      - java_buildpack
+    ...
+    services:
+      - appx-datadog
+      - ...
+```
+
+
