@@ -40,7 +40,7 @@ In general, however, is cleaner to keep all Datadog configurations in the user p
 
 The `DD_API_KEY` can't be set in the manifest and must be in the service.
 
-`JAVA_OPTS` ... TODO
+`JAVA_OPTS` must be set in the manifest. If it does not include a Datadog agent (named `dd-java-agent-[0-9.]*.jar`) as a javagent and some is found in the filesystem, that one is added to `JAVA_OPTS`.
 
 `DD_TAGS` defined in the Datadog service are merged with the defaults, the former overriding the latter on key conflicts. However, defining `DD_TAGS` in the manifest allows to override it as a whole, meaning no values from the service or defaults are considered.
 

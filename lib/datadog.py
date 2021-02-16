@@ -15,7 +15,7 @@ def main():
     defaults, default_tags = get_defaults(appinfo, service)
     agents = find_agents()
     env_vars = make_env(service, appinfo, defaults, default_tags, agents)
-    change_env_vars(add=env_vars, remove=['DD_API_KEY'])
+    change_env_vars(add=env_vars, remove=['DD_API_KEY'], override=['JAVA_OPTS'])
 
 
 def get_defaults(appinfo, service):
@@ -101,13 +101,10 @@ def make_env(service, appinfo, defaults, default_tags, agents):
     else:
         log('No agent configured and none found')
 
-
-
-
     return combined
 
 
-def change_env_vars(add, remove):
+def change_env_vars(add, remove, override):
     """ Sets and unsets env variables """
 
     for key in remove:
@@ -116,7 +113,7 @@ def change_env_vars(add, remove):
             print('unset {}'.format(key))
 
     for (key, value) in add.items():
-        if key in os.environ:
+        if key in os.environ and not key in override:
             log('skipping: {}, overriden with value {}'.format(key, os.environ[key]))
         else:
             log('injecting: {}={}'.format(key, value))
