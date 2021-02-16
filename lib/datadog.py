@@ -2,16 +2,19 @@ from __future__ import print_function
 import os
 import sys
 import json
+import re
 
 SERVICE_TAG = 'datadog'
 KEY_TAGS = 'DD_TAGS'
 
+AGENT_REGEXP = re.compile('dd-java-agent-[0-9.]*.jar')
 
 def main():
     appinfo = get_application_info()
     service = find_datadog_service()
     defaults, default_tags = get_defaults(appinfo, service)
-    env_vars = make_env(service, appinfo, defaults, default_tags)
+    agents = find_agents()
+    env_vars = make_env(service, appinfo, defaults, default_tags, agents)
     change_env_vars(add=env_vars, remove=['DD_API_KEY'])
 
 
@@ -42,6 +45,15 @@ def get_defaults(appinfo, service):
     return (defaults, default_tags)
 
 
+def find_agents():
+    result = []
+    for root, dirs, files in os.walk('.'):
+        for name in files:
+            if AGENT_REGEXP.match(name):
+                result.append(os.path.join(root, name))
+    return result
+
+
 def get_application_info():
     """ Collect the information about the application """
 
@@ -64,7 +76,7 @@ def find_datadog_service():
     return datadog_service
 
 
-def make_env(service, appinfo, defaults, default_tags):
+def make_env(service, appinfo, defaults, default_tags, agents):
     service_vars = service.get('credentials', {})
     combined = merge_dicts(service_vars, defaults)
 
@@ -74,6 +86,21 @@ def make_env(service, appinfo, defaults, default_tags):
     else:
         tags = default_tags
     combined[KEY_TAGS] = ','.join('{}={}'.format(k, v) for k, v in tags.items())
+
+    java_opts = os.environ.get('JAVA_OPTS', '')
+    opts = java_opts.split(' ')
+    agent_opts = [o for o in opts if o.startswith('-javaagent:') and AGENT_REGEXP.search(o)]
+    if agent_opts:
+        log('Skipping agent configuration, already defined')
+    elif agents:
+        agent = agents[0]
+        log('Adding agent configuration: {}'.format(agent))
+        opts.append('-javaagent:{}'.format(agent))
+        combined['JAVA_OPTS'] = ' '.join(opts)
+    else:
+        log('No agent configured and none found')
+
+
 
 
     return combined
