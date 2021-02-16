@@ -58,7 +58,7 @@ def find_datadog_service():
         abort("No service bind found with tag {}".format(SERVICE_TAG))
     datadog_service = tagged_services[0]
     if len(tagged_services) > 1:
-        warn("Multiple tagged services found, using {}".format(datadog_service))
+        log("Multiple tagged services found, using {}".format(datadog_service))
     return datadog_service
 
 
@@ -75,27 +75,25 @@ def make_env(service, appinfo, defaults, default_tags):
 def change_env_vars(add, remove):
     """ Sets and unsets env variables """
 
-    print('removing env variables')
     for key in remove:
         if key in os.environ:
-            print('removing: {}'.format(key))
-            del os.environ[key]
+            log('removing: {}'.format(key))
+            print('unset {}'.format(key))
 
-    print('injecting env variables')
     for (key, value) in add.items():
         if key in os.environ:
-            print('skipping: {}, overriden with value {}'.format(key, os.environ[key]))
+            log('skipping: {}, overriden with value {}'.format(key, os.environ[key]))
         else:
-            print('injecting: {}={}'.format(key, value))
-            os.environ[key] = str(value)
+            log('injecting: {}={}'.format(key, value))
+            print('export {}={}'.format(key, str(value)))
 
 
-def warn(msg):
-    print(msg, file=sys.stderr)
+def log(msg):
+    print('[dh-io-datadog]', msg, file=sys.stderr)
 
 
 def abort(msg, rc=1):
-    print(msg, file=sys.stderr)
+    print('[dh-io-datadog]', msg, file=sys.stderr)
     sys.exit(rc)
 
 
