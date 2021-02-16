@@ -22,7 +22,8 @@ def get_defaults(appinfo, service):
     app = appinfo.get('application_name', '')
     space = appinfo.get('space_name', '')
     org = appinfo.get('organization_name', '')
-    version = os.environ.get('DD_VERSION', 1)
+    detected_version = find_version()
+    version = os.environ.get('DD_VERSION', detected_version if detected_version is not None else 1)
     logs_port = os.environ.get('STD_LOG_COLLECTION_PORT', '10514')
     defaults= {
             'DD_ENV': space,
@@ -53,6 +54,16 @@ def find_agents():
             if AGENT_REGEXP.match(name):
                 result.append(os.path.join(root, name))
     return result
+
+
+def find_version():
+    try:
+        with open('META-INF/MANIFEST.MF') as f:
+            lines = [line.strip() for line in f.readlines() if line.strip()]
+            keyvalues = dict(tuple(line.split(': ', 1)) for line in lines)
+            return keyvalues.get('Implementation-Version', None)
+    except:
+        return None
 
 
 def get_application_info():
