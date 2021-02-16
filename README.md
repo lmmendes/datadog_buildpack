@@ -42,9 +42,10 @@ The `DD_API_KEY` can't be set in the manifest and must be in the service.
 
 `JAVA_OPTS` ... TODO
 
-`DD_TAGS` ... TODO
+`DD_TAGS` defined in the Datadog service are merged with the defaults, the former overriding the latter on key conflicts. However, defining `DD_TAGS` in the manifest allows to override it as a whole, meaning no values from the service or defaults are considered.
 
 `DD_VERSION` ... TODO
+
 
 
 # How to use it
@@ -75,4 +76,8 @@ applications:
       - ...
 ```
 
+
+# Default env values
+
+TODO
 
