@@ -94,6 +94,7 @@ def make_env(service, appinfo, defaults, default_tags, agents):
         log('Skipping agent configuration, already defined')
     elif agents:
         agent = agents[0]
+        log('Found agents: {}'.format(' '.join(agents)))
         log('Adding agent configuration: {}'.format(agent))
         opts.append('-javaagent:{}'.format(agent))
         combined['JAVA_OPTS'] = ' '.join(opts)
