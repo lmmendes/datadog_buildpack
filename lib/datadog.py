@@ -97,5 +97,14 @@ def abort(msg, rc=1):
     sys.exit(rc)
 
 
+def warn(msg):
+    print(msg, file=sys.stderr)
+
+
+def abort(msg, rc=1):
+    print(msg, file=sys.stderr)
+    sys.exit(rc)
+
+
 if __name__ == "__main__":
     main()
