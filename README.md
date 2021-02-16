@@ -44,8 +44,7 @@ The `DD_API_KEY` can't be set in the manifest and must be in the service.
 
 `DD_TAGS` defined in the Datadog service are merged with the defaults, the former overriding the latter on key conflicts. However, defining `DD_TAGS` in the manifest allows to override it as a whole, meaning no values from the service or defaults are considered.
 
-`DD_VERSION` ... TODO
-
+`DD_VERSION` can be explicitly set in the manifest or otherwise can be infered from the `Implementation-Version` key in `META-INF/MANIFEST.MF`, if present.
 
 
 # How to use it
