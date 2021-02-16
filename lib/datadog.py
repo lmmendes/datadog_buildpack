@@ -23,6 +23,7 @@ def get_defaults(appinfo, service):
     space = appinfo.get('space_name', '')
     org = appinfo.get('organization_name', '')
     version = os.environ.get('DD_VERSION', 1)
+    logs_port = os.environ.get('STD_LOG_COLLECTION_PORT', '10514')
     defaults= {
             'DD_ENV': space,
             'DD_VERSION': version,
@@ -34,8 +35,8 @@ def get_defaults(appinfo, service):
             'DD_LOGS_INJECTION': 'true',
             'DD_TRACE_ANALYTICS_ENABLED': 'true',
             'DD_ENABLE_CHECKS': 'false',
-            'STD_LOG_COLLECTION_PORT': 10514,
-            'LOGS_CONFIG': json.dumps([{"type": "tcp", "port": "10514", "source": "pcf-mendelui", "service": app}]),
+            'STD_LOG_COLLECTION_PORT': logs_port,
+            'LOGS_CONFIG': json.dumps([{"type": "tcp", "port": logs_port, "source": "pcf-mendelui", "service": app}]),
             }
     default_tags = {
             'service': app,
@@ -133,15 +134,6 @@ def log(msg):
 
 def abort(msg, rc=1):
     print('[dh-io-datadog]', msg, file=sys.stderr)
-    sys.exit(rc)
-
-
-def warn(msg):
-    print(msg, file=sys.stderr)
-
-
-def abort(msg, rc=1):
-    print(msg, file=sys.stderr)
     sys.exit(rc)
 
 
