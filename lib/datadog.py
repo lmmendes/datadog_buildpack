@@ -98,7 +98,7 @@ def make_env(service, appinfo, defaults, default_tags, agents):
         tags = merge_dicts(service_tags, default_tags)
     else:
         tags = default_tags
-    combined[KEY_TAGS] = ','.join('{}={}'.format(k, v) for k, v in tags.items())
+    combined[KEY_TAGS] = ','.join('{}:{}'.format(k, v) for k, v in tags.items())
 
     java_opts = os.environ.get('JAVA_OPTS', '')
     opts = java_opts.split(' ')
