@@ -57,6 +57,8 @@ Create a PCF user provided service containing the relevant variables, eg:
 cf cups appx-datadog -t "datadog" -p '{"DD_API_KEY":"53cr37"}'
 ```
 
+The important here is adding the tag "datadog" to the service, you then can edit the content of the service in the AppsManager of PCF, if you are more visually inclined. 
+
 ## Update the manifest
 
 
@@ -66,7 +68,7 @@ The manifest must include the datadog service and the buildpacks in this order:
 applications:
   - name: appx
     buildpacks:
-      - dh-io-datadog
+      - dh_io_datadog
       - datadog_application_monitoring
       - java_buildpack
     ...
@@ -74,9 +76,12 @@ applications:
       - appx-datadog
       - ...
 ```
-
+Since the `dh_io_datadog` buildpack is not published inside PCF buildpack manager you can repleace it with the repository url: https://github.com/lmmendes/datadog_buildpack.git 
 
 # Default env values
 
-TODO
+The decorator will expose the following variables
 
+| Variable  | Default  | Observation  |
+|---|---|---|
+| DD_API_KEY | None | Needs to be declared inside the User Defined Service from PCF |
