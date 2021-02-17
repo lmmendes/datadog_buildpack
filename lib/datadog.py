@@ -36,6 +36,7 @@ def get_defaults(appinfo, service):
             'DD_LOGS_INJECTION': 'true',
             'DD_TRACE_ANALYTICS_ENABLED': 'true',
             'DD_ENABLE_CHECKS': 'false',
+            'DD_PROPAGATION_STYLE_INJECT': 'Datadog,B3',
             'STD_LOG_COLLECTION_PORT': logs_port,
             'LOGS_CONFIG': json.dumps([{"type": "tcp", "port": logs_port, "source": "pcf", "service": app}]),
             }
