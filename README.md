@@ -76,7 +76,7 @@ applications:
       - appx-datadog
       - ...
 ```
-Since the `dh_io_datadog` buildpack is not published inside PCF buildpack manager you can repleace it with the repository url: https://github.com/lmmendes/datadog_buildpack.git 
+Since the `dh_io_datadog` buildpack is not published inside PCF buildpack manager you can replace it with the repository url: https://github.com/lmmendes/datadog_buildpack.git 
 
 # Default env values
 
@@ -85,3 +85,16 @@ The decorator will expose the following variables
 | Variable  | Default  | Observation  |
 |---|---|---|
 | DD_API_KEY | None | Needs to be declared inside the User Defined Service from PCF |
+| DD_ENV| Inferred from the PCF space | |
+| DD_SERVICE | Application name inferred from PCF app name |  | 
+| DD_SITE | datadoghq.eu | |
+|RUN_AGENT | true ||
+| DD_APM_ENABLED | true ||
+| DD_LOGS_ENABLED | true | |
+| DD_LOGS_INJECTION | true ||
+| DD_TRACE_ANALYTICS_ENABLED | true ||
+| DD_ENABLE_CHECKS | false ||
+| STD_LOG_COLLECTION_PORT | 10514 ||
+|DD_PROPAGATION_STYLE_INJECT| Datadog,B3 ||
+|LOGS_CONFIG | type: tcp, port: STD_LOG_COLLECTION_PORT, source: pcf, service: DD_SERVICE |
+| DD_TAGS | service: inferred from pcf app name , tenant: inferred from pcf organization name  , version: retrived from the  |
