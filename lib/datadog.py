@@ -8,6 +8,8 @@ SERVICE_TAG = 'datadog'
 KEY_TAGS = 'DD_TAGS'
 
 AGENT_REGEXP = re.compile('dd-java-agent-[0-9.]*.jar')
+APP_NAME_REGEXP = re.compile("-v\d+-")
+DEBUG = os.environ.get('DEBUG_DH_IO_DATADOG', False)
 
 def main():
     appinfo = get_application_info()
@@ -19,7 +21,7 @@ def main():
 
 
 def get_defaults(appinfo, service):
-    app = appinfo.get('application_name', '')
+    app = get_application_name(appinfo)
     space = appinfo.get('space_name', '')
     org = appinfo.get('organization_name', '')
     detected_version = find_version()
@@ -75,6 +77,14 @@ def get_application_info():
         abort("VCAP_APPLICATION must specify application_name")
     return appinfo
 
+def get_application_name(app_info):
+    """ Get the application name from APPLICATION_NAME env var or from VCAP_APPLICATION values """
+    if os.environ.get('APPLICATION_NAME'):
+        return os.environ.get('APPLICATION_NAME')
+    app_name = APP_NAME_REGEXP.split(app_info.get('application_name', ''))[0]
+    org_name = app_info.get('organization_name', '')
+    return "{}-{}".format(org_name, app_name)
+
 
 def find_datadog_service():
     """ Find datadog service """
@@ -94,7 +104,7 @@ def make_env(service, appinfo, defaults, default_tags, agents):
     combined = merge_dicts(service_vars, defaults)
 
     if KEY_TAGS in service_vars:
-        service_tags = dict(tuple(kv.strip().split('=')) for kv in service_vars[KEY_TAGS].split(','))
+        service_tags = dict(tuple(kv.strip().split(':')) for kv in service_vars[KEY_TAGS].split(','))
         tags = merge_dicts(service_tags, default_tags)
     else:
         tags = default_tags
@@ -141,7 +151,7 @@ def merge_dicts(*dicts):
     return res
 
 def log(msg):
-    print('[dh-io-datadog]', msg, file=sys.stderr)
+    if DEBUG: print('[dh-io-datadog]', msg, file=sys.stdout)
 
 
 def abort(msg, rc=1):

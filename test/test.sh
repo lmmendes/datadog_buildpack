@@ -90,8 +90,8 @@ export VCAP_SERVICES='{
       "instance_name": "dh-io-datadog",
       "binding_name": null,
       "credentials": {
-        "DD_API_KEY": "THIS_IS_API_KEY",
-        "DD_TAGS": "lang=java"
+        "DD_API_KEY": "THIS_IS_API_KEY_VALUE",
+        "DD_TAGS": "tag1:value1,tag2:value2"
       },
       "syslog_drain_url": "",
       "volume_mounts": []
@@ -126,7 +126,7 @@ export VCAP_APPLICATION='{
     "mem": 1024,
     "disk": 1024
   },
-  "application_name": "nebula-sandbox-app",
+  "application_name": "g-ags-fallback-v1-2.6.6-SNAPSHOT-14",
   "application_uris": [
     "nebula-v1-alpha.escola.internal"
   ],
